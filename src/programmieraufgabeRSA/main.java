@@ -10,9 +10,14 @@ public class main {
 
     public static void main(String[] args) throws IOException {
 
+        generateKeyPair();
+
+    }
+
+    public static void generateKeyPair() throws IOException {
         // create two random prime numbers
-//        BigInteger p = BigInteger.probablePrime(5, new Random());
-//        BigInteger q = BigInteger.probablePrime(5, new Random());
+//        BigInteger p = BigInteger.probablePrime(2048, new Random());
+//        BigInteger q = BigInteger.probablePrime(2048, new Random());
 
         BigInteger p = BigInteger.valueOf(3);
         BigInteger q = BigInteger.valueOf(11);
@@ -31,31 +36,17 @@ public class main {
         // chose a number that isn't in Z*(n)
         BigInteger e = p;
 
-        // number e != factor of n:
-        // loop through all possible numbers (e-phiN) to get a number that isn't a factor of n
-//        for (e = BigInteger.TWO; e.compareTo(phiN) < 0; e = e.add(BigInteger.ONE)) {
-//            if (ggT(e, phiN).equals(1)) {
-//                break;
-//            }
-//        }
-
         // d: e*d mod phiN == 1
-        //Euklid: a = phiN, b = e
         BigInteger d = euklid(phiN, e);
         if (d.compareTo(BigInteger.ZERO) < 0) {
             d = d.add(phiN);
         }
 
-        System.out.println("p: " + p);
-        System.out.println("q: " + q);
-        System.out.println("n: " + n);
-        System.out.println("phiN: " + phiN);
-        System.out.println("e: " + e);
-        System.out.println("d: " + d);
+        System.out.println("p: " + p + ", q:" + q + ", n: " + n + ", phiN: " + phiN + ", e: " + e + ", d: " + d);
 
+        // write public and private key into text file
         writeFile("sk.txt", "(" + n + "," + d + ")");
         writeFile("pk.txt", "(" + n + "," + e + ")");
-
     }
 
     public static BigInteger euklid(BigInteger a, BigInteger b){
@@ -70,8 +61,6 @@ public class main {
             x0temp = x0; y0temp = y0;
             x0 = x1; y0 = y1;
             x1 = x0temp.subtract(q.multiply(x1)); y1 = y0temp.subtract(q.multiply(y1));
-//             System.out.println("x1 = " + x1 + " | y1 = " + y1);
-//             System.out.println("a = " + a + " b = " + b + " x0 = " + x0 + " y0 = " + y0 + " x1 = " + x1 + " y1 = " + y1 + " q = " + q + " r = " + r);
         }
         return y0;
     }
