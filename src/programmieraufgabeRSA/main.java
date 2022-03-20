@@ -65,14 +65,6 @@ public class main {
         return y0;
     }
 
-    public static BigInteger ggT(BigInteger a, BigInteger b) {
-        if (a.equals(BigInteger.ZERO)){
-            return b;
-        } else {
-            return ggT(b.mod(a), a);
-        }
-    }
-
     public static void writeFile(String fileName, String str)
         throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter("src/programmieraufgabeRSA/" + fileName));
