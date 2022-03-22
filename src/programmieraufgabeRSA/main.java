@@ -16,12 +16,12 @@ public class main {
 
     public static void generateKeyPair() throws IOException {
         // create two random prime numbers
-//        BigInteger p = BigInteger.probablePrime(2048, new Random());
-//        BigInteger q = BigInteger.probablePrime(2048, new Random());
+        BigInteger p = BigInteger.probablePrime(2048, new Random());
+        BigInteger q = BigInteger.probablePrime(2048, new Random());
 
         // values need to be big enough so that n is bigger than the values that need to be en-/decoded
-        BigInteger p = BigInteger.valueOf(17);
-        BigInteger q = BigInteger.valueOf(19);
+//        BigInteger p = BigInteger.valueOf(17);
+//        BigInteger q = BigInteger.valueOf(19);
 
         // set a new 2nd prime if the prime numbers are the same
         while (p.equals(q)) {
@@ -65,7 +65,8 @@ public class main {
 
         // read public key
         String publicKey = FileReaderWriter.readFileAsString("pk.txt");
-        int n = Integer.parseInt(publicKey.substring( 0, publicKey.indexOf(",")));
+        System.out.println(Integer.parseInt(publicKey.substring(0, publicKey.indexOf(","))));
+        int n = Integer.parseInt(publicKey.substring(0, publicKey.indexOf(",")));
         int e = Integer.parseInt(publicKey.substring(publicKey.indexOf(",")+1));
 
         // encrypt each character
