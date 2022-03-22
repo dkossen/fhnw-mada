@@ -2,26 +2,24 @@ package programmieraufgabeRSA;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Random;
 
-public class main {
+public class RSA {
 
     public static void main(String[] args) throws Exception {
         generateKeyPair(); // Task 1
         encryptString("text.txt");   // Task 2
-//        decryptString("chiffre.txt");   // Task 3
+        decryptString("chiffre.txt");   // Task 3
     }
 
     public static void generateKeyPair() throws IOException {
         // create two random prime numbers
-//        BigInteger p = BigInteger.probablePrime(48, new Random());
-//        BigInteger q = BigInteger.probablePrime(48, new Random());
+        BigInteger p = BigInteger.probablePrime(2048, new Random());
+        BigInteger q = BigInteger.probablePrime(2048, new Random());
 
         // values need to be big enough so that n is bigger than the values that need to be en-/decoded
-        BigInteger p = BigInteger.valueOf(3);
-        BigInteger q = BigInteger.valueOf(11);
+//        BigInteger p = BigInteger.valueOf(17);
+//        BigInteger q = BigInteger.valueOf(19);
 
         // set a new 2nd prime if the prime numbers are the same
         while (p.equals(q)) {
@@ -59,8 +57,8 @@ public class main {
         BigInteger[] convertedText = convertToASCII(text);
 //        byte[] convertedText = convertToASCII(text);
         String convertedTextAsString = "";
-        for (int j = 0; j < convertedText.length; j++){
-            convertedTextAsString += convertedText[j] + ", ";
+        for (BigInteger integer : convertedText) {
+            convertedTextAsString += integer + ",";
         }
         System.out.println("Text in ASCII: " + convertedTextAsString);
 
@@ -68,13 +66,12 @@ public class main {
         String publicKey = FileReaderWriter.readFileAsString("pk.txt");
         BigInteger n = new BigInteger(publicKey.substring(0, publicKey.indexOf(",")));
         BigInteger e = new BigInteger(publicKey.substring(publicKey.indexOf(",")+1));
-        System.out.println(n);
-        System.out.println(e);
+        System.out.println("n: " + n + " | e: " + e);
 
         // encrypt each character
         String encryptedText = "";
-        for (int i = 0; i < convertedText.length; i++) {
-            encryptedText += fastModularExponentiation(convertedText[i], n, e) + ", ";
+        for (BigInteger bigInteger : convertedText) {
+            encryptedText += fastModularExponentiation(bigInteger, n, e) + ",";
         }
 
         // remove last comma from string
@@ -90,37 +87,33 @@ public class main {
         String text = FileReaderWriter.readFileAsString(file);
         System.out.println("Text to decrypt: " + text);
 
-        // convert text to integer array
-//        int[] decryptedTextAsArray = Arrays.stream(text.split(", ")).mapToInt(Integer::parseInt).toArray();
-//        BigInteger[] decryptedTextAsArray = Arrays.stream(text.split(", ")).mapTo(Integer::parseInt).toArray();
-
         int l = text.length();
-        System.out.println("length: "+ l);
         BigInteger[] decryptedTextAsArray = new BigInteger[l];
-        for(int i = 0; i < l; ++i) {
-            decryptedTextAsArray[i] = BigInteger.valueOf(text.charAt(i)-'0');
+        String[] array = text.split(",");
+        int index = 0;
+        for(String value:array) {
+            decryptedTextAsArray[index] = new BigInteger(value);
+            index++;
         }
-        System.out.println(decryptedTextAsArray[1]);
 
         // read private key
         String privateKey = FileReaderWriter.readFileAsString("sk.txt");
-//        int n = Integer.parseInt(privateKey.substring(0, privateKey.indexOf(",")));
-//        int d = Integer.parseInt(privateKey.substring(privateKey.indexOf(",")+1));
         BigInteger n = new BigInteger(privateKey.substring(0, privateKey.indexOf(",")));
         BigInteger d = new BigInteger(privateKey.substring(privateKey.indexOf(",")+1));
-        System.out.println("n: " + n);
-        System.out.println("d: " + d);
+        System.out.println("n: " + n + " | d: " + d);
 
         // decrypt each element in the array
         String decryptedTextASCII = "";
-        String decryptedTextString = "";
-        for (int i = 0; i < decryptedTextAsArray.length; i++) {
-//            decryptedTextString += (fastModularExponentiation(decryptedTextAsArray[i], n, d));
-//            decryptedTextString += Character.toString((char)fastModularExponentiation(decryptedTextAsArray[i], n, d));
-            decryptedTextASCII += fastModularExponentiation(decryptedTextAsArray[i], n, d) + ", ";
+        for (BigInteger bigInteger : decryptedTextAsArray) {
+            if (bigInteger != null) {
+                decryptedTextASCII += fastModularExponentiation(bigInteger, n, d) + ",";
+            }
         }
 
-        // remove last comma from string
+        // convert ASCII to String
+        String decryptedTextString = convertASCIIToString(decryptedTextASCII);
+
+        // remove last comma from string for readability
         decryptedTextASCII = removeCommaTail(decryptedTextASCII);
 
         System.out.println("Decrypted text in ASCII: " + decryptedTextASCII);
@@ -143,9 +136,8 @@ public class main {
         return y0;
     }
 
-    public static BigInteger fastModularExponentiation(BigInteger x, BigInteger n, BigInteger e) {
-        String exponentAsBinary = e.toString(2);
-//        System.out.println("exponentAsBinary: " + exponentAsBinary);
+    public static BigInteger fastModularExponentiation(BigInteger x, BigInteger n, BigInteger exponent) {
+        String exponentAsBinary = exponent.toString(2);
         int i = exponentAsBinary.length()-1;
         BigInteger h = BigInteger.ONE, k = x;
 
@@ -160,26 +152,28 @@ public class main {
         return h;
     }
 
-    public static BigInteger[] convertToASCII(String text) { //Mada
+    public static BigInteger[] convertToASCII(String text) {
         int l = text.length();
-        System.out.println("length: " + l);
         BigInteger[] data = new BigInteger[l];
         for(int i = 0; i < l; ++i) {
-            // todo convert letter into ASCII value --> how?
-            System.out.println("text.charAt(i)-0: " + (text.charAt(i)));
-//            data[i] = (text.charAt(i));
-            data[i] = BigInteger.valueOf( text.charAt(i)-'0' );
-//            System.out.println("data: " + data[i]);
+            char character = text.charAt(i);
+            data[i] = new BigInteger(String.valueOf((int)character));
         }
         return data;
     }
 
-//    public static byte[] convertToASCII(String text) {
-//        return text.getBytes(StandardCharsets.US_ASCII);
-//    }
+    public static String convertASCIIToString(String text) {
+        String[] array = text.split(",");
+        String convertedText = "";
+        for(String value:array) {
+            char c = (char)(int)Integer.parseInt(value);
+            convertedText += c;
+        }
+        return convertedText;
+    }
 
     public static String removeCommaTail(String str) {
-        return str.replaceAll(", $", "");
+        return str.replaceAll(",$", "");
     }
 
 }
