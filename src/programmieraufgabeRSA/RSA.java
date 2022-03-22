@@ -8,8 +8,8 @@ public class RSA {
 
     public static void main(String[] args) throws Exception {
         generateKeyPair(); // Task 1
-        encryptString("text.txt");   // Task 2
-        decryptString("chiffre.txt");   // Task 3
+        encryptString("text.txt", "pk.txt");   // Task 2
+        decryptString("chiffre.txt", "sk.txt");   // Task 3
     }
 
     public static void generateKeyPair() throws IOException {
@@ -48,7 +48,7 @@ public class RSA {
         FileReaderWriter.writeFile("pk.txt", n + "," + e);
     }
 
-    public static void encryptString(String file) throws Exception {
+    public static void encryptString(String file, String privateKeyFile) throws Exception {
         // read file as string
         String text = FileReaderWriter.readFileAsString(file);
         System.out.println("Text to encrypt: " + text);
@@ -63,7 +63,7 @@ public class RSA {
         System.out.println("Text in ASCII: " + convertedTextAsString);
 
         // read public key
-        String publicKey = FileReaderWriter.readFileAsString("pk.txt");
+        String publicKey = FileReaderWriter.readFileAsString(privateKeyFile);
         BigInteger n = new BigInteger(publicKey.substring(0, publicKey.indexOf(",")));
         BigInteger e = new BigInteger(publicKey.substring(publicKey.indexOf(",")+1));
         System.out.println("n: " + n + " | e: " + e);
@@ -82,7 +82,7 @@ public class RSA {
         FileReaderWriter.writeFile("chiffre.txt", encryptedText);
     }
 
-    public static void decryptString(String file) throws Exception {
+    public static void decryptString(String file, String publicKeyFile) throws Exception {
         // read file as string
         String text = FileReaderWriter.readFileAsString(file);
         System.out.println("Text to decrypt: " + text);
@@ -97,7 +97,7 @@ public class RSA {
         }
 
         // read private key
-        String privateKey = FileReaderWriter.readFileAsString("sk.txt");
+        String privateKey = FileReaderWriter.readFileAsString(publicKeyFile);
         BigInteger n = new BigInteger(privateKey.substring(0, privateKey.indexOf(",")));
         BigInteger d = new BigInteger(privateKey.substring(privateKey.indexOf(",")+1));
         System.out.println("n: " + n + " | d: " + d);
@@ -118,6 +118,8 @@ public class RSA {
 
         System.out.println("Decrypted text in ASCII: " + decryptedTextASCII);
         System.out.println("Decrypted text as String: " + decryptedTextString);
+        FileReaderWriter.writeFile("text-d.txt", decryptedTextString);
+
     }
 
     public static BigInteger euklid(BigInteger a, BigInteger b){
