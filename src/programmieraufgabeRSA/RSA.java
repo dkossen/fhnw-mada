@@ -7,15 +7,16 @@ import java.util.Random;
 public class RSA {
 
     public static void main(String[] args) throws Exception {
-        generateKeyPair(); // Task 1
-        encryptString("text.txt", "pk.txt");   // Task 2
-        decryptString("chiffre.txt", "sk.txt");   // Task 3
+        generateKeyPair(2048); // Task 1
+        encryptString("text.txt", "pk.txt", "chiffre.txt"); // Task 2
+        decryptString("chiffre.txt", "sk.txt", "text-d.txt"); // Task 3
+        decryptString("chiffre_task4.txt", "sk_task4.txt", "text-d_task4.txt"); // Task 4
     }
 
-    public static void generateKeyPair() throws IOException {
+    public static void generateKeyPair(int bitLength) throws IOException {
         // create two random prime numbers
-        BigInteger p = BigInteger.probablePrime(2048, new Random());
-        BigInteger q = BigInteger.probablePrime(2048, new Random());
+        BigInteger p = BigInteger.probablePrime(bitLength, new Random());
+        BigInteger q = BigInteger.probablePrime(bitLength, new Random());
 
         // values need to be big enough so that n is bigger than the values that need to be en-/decoded
 //        BigInteger p = BigInteger.valueOf(17);
@@ -48,7 +49,7 @@ public class RSA {
         FileReaderWriter.writeFile("pk.txt", n + "," + e);
     }
 
-    public static void encryptString(String file, String privateKeyFile) throws Exception {
+    public static void encryptString(String file, String privateKeyFile, String resultFile) throws Exception {
         // read file as string
         String text = FileReaderWriter.readFileAsString(file);
         System.out.println("Text to encrypt: " + text);
@@ -64,6 +65,7 @@ public class RSA {
 
         // read public key
         String publicKey = FileReaderWriter.readFileAsString(privateKeyFile);
+        publicKey = publicKey.replace("(", "").replace(")", "");
         BigInteger n = new BigInteger(publicKey.substring(0, publicKey.indexOf(",")));
         BigInteger e = new BigInteger(publicKey.substring(publicKey.indexOf(",")+1));
         System.out.println("n: " + n + " | e: " + e);
@@ -79,10 +81,10 @@ public class RSA {
         System.out.println("Encrypted text: " + encryptedText);
 
         // write encrypted text into text file
-        FileReaderWriter.writeFile("chiffre.txt", encryptedText);
+        FileReaderWriter.writeFile(resultFile, encryptedText);
     }
 
-    public static void decryptString(String file, String publicKeyFile) throws Exception {
+    public static void decryptString(String file, String publicKeyFile, String resultFile) throws Exception {
         // read file as string
         String text = FileReaderWriter.readFileAsString(file);
         System.out.println("Text to decrypt: " + text);
@@ -98,6 +100,7 @@ public class RSA {
 
         // read private key
         String privateKey = FileReaderWriter.readFileAsString(publicKeyFile);
+        privateKey = privateKey.replace("(", "").replace(")", "");
         BigInteger n = new BigInteger(privateKey.substring(0, privateKey.indexOf(",")));
         BigInteger d = new BigInteger(privateKey.substring(privateKey.indexOf(",")+1));
         System.out.println("n: " + n + " | d: " + d);
@@ -118,7 +121,7 @@ public class RSA {
 
         System.out.println("Decrypted text in ASCII: " + decryptedTextASCII);
         System.out.println("Decrypted text as String: " + decryptedTextString);
-        FileReaderWriter.writeFile("text-d.txt", decryptedTextString);
+        FileReaderWriter.writeFile(resultFile, decryptedTextString);
 
     }
 
