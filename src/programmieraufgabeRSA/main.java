@@ -19,8 +19,9 @@ public class main {
 //        BigInteger p = BigInteger.probablePrime(2048, new Random());
 //        BigInteger q = BigInteger.probablePrime(2048, new Random());
 
-        BigInteger p = BigInteger.valueOf(3);
-        BigInteger q = BigInteger.valueOf(11);
+        // values need to be big enough so that n is bigger than the values that need to be en-/decoded
+        BigInteger p = BigInteger.valueOf(17);
+        BigInteger q = BigInteger.valueOf(19);
 
         // set a new 2nd prime if the prime numbers are the same
         while (p.equals(q)) {
@@ -79,7 +80,6 @@ public class main {
 
         // write encrypted text into text file
         FileReaderWriter.writeFile("chiffre.txt", encryptedText);
-
     }
 
     public static void decryptString(String file) throws Exception {
@@ -92,21 +92,22 @@ public class main {
 
         // read private key
         String privateKey = FileReaderWriter.readFileAsString("sk.txt");
-        int n = Integer.parseInt(privateKey.substring( 0, privateKey.indexOf(",")));
+        int n = Integer.parseInt(privateKey.substring(0, privateKey.indexOf(",")));
         int d = Integer.parseInt(privateKey.substring(privateKey.indexOf(",")+1));
 
         // decrypt each element in the array
-        String decryptedText = "";
+        String decryptedTextASCII = "";
+        String decryptedTextString ="";
         for (int i = 0; i < decryptedTextAsArray.length; i++) {
-            String abc = Character.toString((char)fastModularExponentiation(decryptedTextAsArray[i], n, d));
-            System.out.println("abc: " + abc);
-            decryptedText += fastModularExponentiation(decryptedTextAsArray[i], n, d) + ", ";
+            decryptedTextString += Character.toString((char)fastModularExponentiation(decryptedTextAsArray[i], n, d));
+            decryptedTextASCII += fastModularExponentiation(decryptedTextAsArray[i], n, d) + ", ";
         }
 
         // remove last comma from string
-        decryptedText = removeCommaTail(decryptedText);
-        System.out.println("Decrypted text: " + decryptedText);
+        decryptedTextASCII = removeCommaTail(decryptedTextASCII);
 
+        System.out.println("Decrypted text in ASCII: " + decryptedTextASCII);
+        System.out.println("Decrypted text as String: " + decryptedTextString);
     }
 
     public static BigInteger euklid(BigInteger a, BigInteger b){
