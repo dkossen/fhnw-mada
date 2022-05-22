@@ -51,10 +51,10 @@ public class Elgamal {
             BigInteger y2 = new BigInteger(arr.substring(arr.indexOf(",")+1));
 
             // do calculations
-            BigInteger x2 = y1.modPow(b, n).modInverse(n);
-            BigInteger xx = y2.multiply(x2).mod(n);
+            BigInteger part1 = y1.modPow(b, n).modInverse(n);
+            BigInteger message = y2.multiply(part1).mod(n);
 
-            decryptedTextASCII += (xx + ";");
+            decryptedTextASCII += (message + ";");
         }
 
         // convert ASCII to String
