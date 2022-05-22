@@ -9,17 +9,11 @@ public class Elgamal {
 
         BigInteger n, g, b, h;
 
-        n = convertHexToBigInteger("hexString.txt"); // task 1
+        // task 1: convert hex number to BigInteger number
+        n = convertHexToBigInteger("hexString.txt");
         g = new BigInteger("2");
         b = randomBigInteger(n);
         h = g.modPow(b, n);
-
-//        System.out.println("n: " + n);
-//        System.out.println("g: " + g);
-//        System.out.println("b: " + b);
-//        System.out.println("g^b: " + h);
-//        System.out.println("Private key: (" + n + ", " + g + ", " + b + ")");
-//        System.out.println("Public key: (" + n + ", " + g + ", " + h + ")");
 
         // task 2: write third part of public and private key into text file
         FileReaderWriter.writeFile("pk.txt", h.toString()); // public
@@ -28,6 +22,39 @@ public class Elgamal {
         encryptString("text.txt", "pk.txt", "chiffre.txt", n, g, b); // task 3
         decryptString("chiffre.txt", "sk.txt", "text-d.txt", n); // task 4
 
+    }
+
+
+    public static void encryptString(String file, String publicKeyFile, String resultFile, BigInteger n, BigInteger g, BigInteger b) throws Exception {
+        // read file as string
+        String text = FileReaderWriter.readFileAsString(file);
+        System.out.println("Text to encrypt: " + text);
+
+        // convert string to ASCII
+        BigInteger[] convertedText = convertStringToASCII(text);
+        String convertedTextAsString = "";
+        for (BigInteger integer : convertedText) {
+            convertedTextAsString += integer + ",";
+        }
+
+        // read public key
+        String publicKey = FileReaderWriter.readFileAsString(publicKeyFile);
+
+        // generator a random BigInteger in range
+        BigInteger a = randomBigInteger(n);
+
+        // encrypt each character
+        String encryptedText = "";
+        for (BigInteger bigInteger : convertedText) {
+            encryptedText += elgamalAlg(n, g, a, b, bigInteger) + ";";
+        }
+
+        // remove last comma from string
+        encryptedText = removeSemicolonTail(encryptedText);
+        System.out.println("Encrypted text: " + encryptedText);
+
+        // write encrypted text into text file
+        FileReaderWriter.writeFile(resultFile, encryptedText);
     }
 
     public static void decryptString(String file, String privateKeyFile, String resultFile, BigInteger n) throws Exception {
@@ -67,38 +94,6 @@ public class Elgamal {
         System.out.println("Decrypted text as String: " + decryptedTextString);
         FileReaderWriter.writeFile(resultFile, decryptedTextString);
 
-    }
-
-    public static void encryptString(String file, String publicKeyFile, String resultFile, BigInteger n, BigInteger g, BigInteger b) throws Exception {
-        // read file as string
-        String text = FileReaderWriter.readFileAsString(file);
-        System.out.println("Text to encrypt: " + text);
-
-        // convert string to ASCII
-        BigInteger[] convertedText = convertStringToASCII(text);
-        String convertedTextAsString = "";
-        for (BigInteger integer : convertedText) {
-            convertedTextAsString += integer + ",";
-        }
-
-        // read public key
-        String publicKey = FileReaderWriter.readFileAsString(publicKeyFile);
-
-        // generator a random BigInteger in range
-        BigInteger a = randomBigInteger(n);
-
-        // encrypt each character
-        String encryptedText = "";
-        for (BigInteger bigInteger : convertedText) {
-            encryptedText += elgamalAlg(n, g, a, b, bigInteger) + ";";
-        }
-
-        // remove last comma from string
-        encryptedText = removeSemicolonTail(encryptedText);
-        System.out.println("Encrypted text: " + encryptedText);
-
-        // write encrypted text into text file
-        FileReaderWriter.writeFile(resultFile, encryptedText);
     }
 
     public static String elgamalAlg(BigInteger n, BigInteger g, BigInteger a, BigInteger b, BigInteger x) {
