@@ -19,8 +19,14 @@ public class Elgamal {
         FileReaderWriter.writeFile("pk.txt", h.toString()); // public
         FileReaderWriter.writeFile("sk.txt", b.toString()); // private
 
-        encryptString("text.txt", "pk.txt", "chiffre.txt", n, g, b); // task 3
-        decryptString("chiffre.txt", "sk.txt", "text-d.txt", n); // task 4
+        // task 3: read test text file and encrypt
+        encryptString("text-test.txt", "pk.txt", "chiffre.txt", n, g, b);
+
+        // task 4: read  chiffre and decrypt
+        decryptString("chiffre.txt", "sk.txt", "text-d.txt", n);
+
+        // task 5: read given chiffre and private key and decrypt
+        decryptString("chiffre-task5.txt", "sk-task5.txt", "text-d-task5.txt", n);
 
     }
 
@@ -148,7 +154,7 @@ public class Elgamal {
         String[] array = text.split(";");
         String convertedText = "";
         for(String value:array) {
-            char c = (char)(int)Integer.parseInt(value);
+            char c = (char) Integer.parseInt(value);
             convertedText += c;
         }
         return convertedText;
