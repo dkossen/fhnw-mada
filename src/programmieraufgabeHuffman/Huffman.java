@@ -2,6 +2,8 @@ package programmieraufgabeHuffman;
 
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Huffman {
 
@@ -12,7 +14,10 @@ public class Huffman {
         System.out.println("Text in file: " + text);
 
         // task 2: create table for each ASCII code and the occurrence
-        createTable(text);
+//        createTable(text);
+
+        String encodedText = createEncoding(text);
+        System.out.println(encodedText);
 
 //        int[] count = new int[256];
 //        int len = text.length();
@@ -35,6 +40,23 @@ public class Huffman {
 //                System.out.println("Occ of " + text.charAt(i) + " = " + count[text.charAt(i)]);
 //            }
 //        }
+    }
+
+    public static String createEncoding(String text) {
+        String encodedText = "";
+        // create map for ASCII character and occurrence
+        Map<Character, Integer> occ = new HashMap<>();
+        for (int i=0; i<text.length(); i++) {
+            char currChar = text.charAt(i);
+            // check and save the occurrence of each ASCII character
+            if (occ.containsKey(text.charAt(i))) {
+                occ.put(currChar, occ.get(currChar)+1);
+            } else {
+                occ.put(currChar, 0);
+            }
+        }
+        System.out.println(occ); //todo: counting not working correctly..
+        return encodedText;
     }
 
     public static void createTable(String text) {
