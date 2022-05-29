@@ -58,7 +58,6 @@ public class Huffman {
         }
         System.out.println("Hashmap of occurrence: " + occ);
 
-
         // create priority queue to later process each leaf in the tree from lowest to highest occurrence
         PriorityQueue<Leaf> queue = new PriorityQueue<Leaf>();
 
@@ -67,9 +66,18 @@ public class Huffman {
             Leaf leaf = new Leaf(character, occ.get(character));
             queue.add(leaf);
         }
-
         System.out.println("Current queue: " + queue);
 
+        // todo: find the two characters with the lowest occurrences and add their occurrences together
+
+        // todo: make a parent leaf for those two characters, remove them from the queue
+
+        // todo: find the next character with the lowest occurrence and add it, then remove it from the queue
+
+        // todo: create codes according to the 'tree'
+        // (start with 1, add 0s until length of Bitstring is a multiple of 8)
+        // create byte Array
+        // save byte Array (output.dat)
 
         return encodedText;
     }
@@ -88,7 +96,6 @@ public class Huffman {
         // todo: remove if not needed
         System.out.println(Arrays.deepToString(table).replace("], ", "]\n"));
 
-
     }
 
     public static int countOccurrence(int asciiCode, String text) {
@@ -101,31 +108,6 @@ public class Huffman {
             }
         }
         return occ;
-    }
-
-
-    public static BigInteger[] convertStringToASCII(String text) {
-        int l = text.length();
-        BigInteger[] data = new BigInteger[l];
-        for(int i = 0; i < l; ++i) {
-            char character = text.charAt(i);
-            data[i] = new BigInteger(String.valueOf((int)character));
-        }
-        return data;
-    }
-
-    public static String convertASCIIToString(String text) {
-        String[] array = text.split(";");
-        String convertedText = "";
-        for(String value:array) {
-            char c = (char) Integer.parseInt(value);
-            convertedText += c;
-        }
-        return convertedText;
-    }
-
-    public static String removeSemicolonTail(String str) {
-        return str.replaceAll(";$", "");
     }
 
 }
