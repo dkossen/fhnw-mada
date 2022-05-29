@@ -49,13 +49,13 @@ public class Huffman {
         for (int i=0; i<text.length(); i++) {
             char currChar = text.charAt(i);
             // check and save the occurrence of each ASCII character
-            if (occ.containsKey(text.charAt(i))) {
-                occ.put(currChar, occ.get(currChar)+1);
-            } else {
+            if (!occ.containsKey(text.charAt(i))) { // add initial value of 0 for all chars
                 occ.put(currChar, 0);
             }
+            occ.put(currChar, occ.get(currChar)+1); // add count
         }
-        System.out.println(occ); //todo: counting not working correctly..
+        System.out.println(occ);
+
         return encodedText;
     }
 
