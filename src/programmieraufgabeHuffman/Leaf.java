@@ -1,6 +1,6 @@
 package programmieraufgabeHuffman;
 
-public class Leaf {
+public class Leaf implements Comparable<Leaf> {
 
     char character;
     int occurrence;
