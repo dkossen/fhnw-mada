@@ -2,8 +2,10 @@ package programmieraufgabeHuffman;
 
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.PriorityQueue;
 
 public class Huffman {
 
@@ -54,7 +56,20 @@ public class Huffman {
             }
             occ.put(currChar, occ.get(currChar)+1); // add count
         }
-        System.out.println(occ);
+        System.out.println("Hashmap of occurrence: " + occ);
+
+
+        // create priority queue to later process each leaf in the tree from lowest to highest occurrence
+        PriorityQueue<Leaf> queue = new PriorityQueue<Leaf>();
+
+        // create a 'tree leaf' for each character
+        for (Character character : occ.keySet()) {
+            Leaf leaf = new Leaf(character, occ.get(character));
+            queue.add(leaf);
+        }
+
+        System.out.println("Current queue: " + queue);
+
 
         return encodedText;
     }
