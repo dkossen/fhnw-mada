@@ -20,28 +20,6 @@ public class Huffman {
 
         String encodedText = createEncoding(text);
         System.out.println(encodedText);
-
-//        int[] count = new int[256];
-//        int len = text.length();
-
-        // Initialize count array index
-//        for (int i = 0; i < len; i++)
-//            count[text.charAt(i)]++;
-
-        // Create an array of given String size
-//        char[] chars = new char[text.length()];
-//        for (int i = 0; i < len; i++) {
-//            chars[i] = text.charAt(i);
-//            int occ = 0;
-//            for (int j = 0; j <= i; j++) {
-//                if (text.charAt(i) == chars[j]) {
-//                    occ++;
-//                }
-//            }
-//            if (occ == 1) {
-//                System.out.println("Occ of " + text.charAt(i) + " = " + count[text.charAt(i)]);
-//            }
-//        }
     }
 
     public static String createEncoding(String text) {
@@ -98,32 +76,32 @@ public class Huffman {
         return encodedText;
     }
 
-    public static void createTable(String text) {
-        int[][] table = new int[128][2];
-        for (int i=0; i<table.length; i++) {
-            table[i][0]= i;
-            table[i][1]= countOccurrence(i, text);
-        }
-
-        // print whole table
-        for (int i=0; i<table.length; i++) {
-            System.out.println(table[i][0] + ": " + table[i][1]);
-        }
-        // todo: remove if not needed
-        System.out.println(Arrays.deepToString(table).replace("], ", "]\n"));
-
-    }
-
-    public static int countOccurrence(int asciiCode, String text) {
-        int len = text.length();
-        int occ = 0;
-
-        for (int i = 0; i < len; i++) {
-            if (text.charAt(i) == asciiCode) {
-                occ++;
-            }
-        }
-        return occ;
-    }
+//    public static void createTable(String text) {
+//        int[][] table = new int[128][2];
+//        for (int i=0; i<table.length; i++) {
+//            table[i][0]= i;
+//            table[i][1]= countOccurrence(i, text);
+//        }
+//
+//        // print whole table
+//        for (int i=0; i<table.length; i++) {
+//            System.out.println(table[i][0] + ": " + table[i][1]);
+//        }
+//        // todo: remove if not needed
+//        System.out.println(Arrays.deepToString(table).replace("], ", "]\n"));
+//
+//    }
+//
+//    public static int countOccurrence(int asciiCode, String text) {
+//        int len = text.length();
+//        int occ = 0;
+//
+//        for (int i = 0; i < len; i++) {
+//            if (text.charAt(i) == asciiCode) {
+//                occ++;
+//            }
+//        }
+//        return occ;
+//    }
 
 }
