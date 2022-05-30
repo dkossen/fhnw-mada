@@ -11,9 +11,9 @@ public class Leaf implements Comparable<Leaf> {
         this.occurrence = occurrence;
     }
 
-    // compare whether the occurence of the character is smaller
+    @Override
     public int compareTo(Leaf leaf) {
-        return occurrence - leaf.occurrence;
+        return occurrence;
     }
 
 }

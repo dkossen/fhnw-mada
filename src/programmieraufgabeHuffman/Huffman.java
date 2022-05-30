@@ -1,9 +1,9 @@
 package programmieraufgabeHuffman;
 
-import java.math.BigInteger;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 
@@ -58,15 +58,31 @@ public class Huffman {
         }
         System.out.println("Hashmap of occurrence: " + occ);
 
+        // sort hashmap value ascending
+        List<Map.Entry<Character, Integer>> occList = new LinkedList<>(occ.entrySet());
+        occList.sort(Map.Entry.comparingByValue());
+
+        HashMap<Character, Integer> occAsc = new HashMap<>();
+        for (Map.Entry<Character, Integer> entry : occList) {
+            occAsc.put(entry.getKey(), entry.getValue());
+        }
+        // print sorted hashmap // todo: not working yet
+        for (Map.Entry<Character, Integer> entry : occAsc.entrySet()) {
+            System.out.println("Key = " + entry.getKey() +
+                ", Value = " + entry.getValue());
+        }
+
         // create priority queue to later process each leaf in the tree from lowest to highest occurrence
         PriorityQueue<Leaf> queue = new PriorityQueue<Leaf>();
 
         // create a 'tree leaf' for each character
-        for (Character character : occ.keySet()) {
-            Leaf leaf = new Leaf(character, occ.get(character));
+        for (Character character : occAsc.keySet()) {
+            Leaf leaf = new Leaf(character, occAsc.get(character));
             queue.add(leaf);
         }
         System.out.println("Current queue: " + queue);
+        System.out.println(occAsc.values());
+
 
         // todo: find the two characters with the lowest occurrences and add their occurrences together
 
